@@ -15,31 +15,11 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
-    <style type="text/css">
-        .thumbnail {
-            padding: 10px; 
-            margin-bottom: 20px; 
-            line-height: 1.5;
-            background-color: #F8FAFC;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-        }
-
-        .caption {
-            padding: 10px;
-        }
-
-        .thumbnail img {
-            display: block;
-            margin: 0 auto;
-
-        }
-
-    </style>
 </head>
 <body>
     <div id="app">
@@ -56,7 +36,10 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         @if(Auth::check())
-                            <li><a href="{{url('/profile')}}/{{ Auth::user()->slug}}" class="navbar-brand">Profile</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{url('/profile')}}/{{ Auth::user()->slug}}" >Profile</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{url('/findFriends')}}">Find Friends</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{url('/requests')}}">My Requests ({{App\friendships::where('status',0)->where('user_requested',Auth::user()->id)->count()}})</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{url('friends')}}">Friends</a></li>
                         @endif
                     </ul>
 

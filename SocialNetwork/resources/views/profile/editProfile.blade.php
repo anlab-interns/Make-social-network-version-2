@@ -27,7 +27,7 @@
                         <div class="row">
                             <div class="col-sm-6 col-md-5">
                                 <div class="card">
-                                    <div class="card-header" align="center">{{Auth::user()->name}}</div>
+                                    <div class="card-header card-title" align="center">{{Auth::user()->name}}</div>
                                     <img src="{{url('../')}}/public/img/{{Auth::user()->pic}}" width="100" height="100" class="img-thumbnail card-img-top">
                                     <div class="card-body">
                                         <h4 class="card-title" align="center">{{$data->city}} - {{$data->country}}</h4>
@@ -47,14 +47,14 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="basic-addon1">City</span>
                                         </div>
-                                        <input type="text" class="form-control" placeholder="City Name" aria-label="City Name" aria-describedby="basic-addon1" name="city">
+                                        <input type="text" class="form-control" placeholder="City Name" aria-label="City Name" aria-describedby="basic-addon1" name="city" value="{{$data->city}}">
                                     </div>
                                     <br>
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="basic-addon1">Country</span>
                                         </div>
-                                        <input type="text" class="form-control" placeholder="Country Name" aria-label="Country Name" aria-describedby="basic-addon1" name="country">
+                                        <input type="text" class="form-control" placeholder="Country Name" aria-label="Country Name" aria-describedby="basic-addon1" name="country" value="{{$data->country}}">
                                     </div>
                                     <br>
                                     <div class="input-group mb-3">

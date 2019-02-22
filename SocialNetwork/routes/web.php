@@ -15,6 +15,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/test', function () {
+    return Auth::user()->test();
+});
+
 Auth::routes();
 
 Route::group(['middleware' => 'auth'], function(){
@@ -32,6 +36,34 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/editProfile','ProfileController@editProfileForm');
 
 	Route::post('updateProfile','ProfileController@updateProfile');
+
+	Route::get('/findFriends','ProfileController@findFriends');
+
+	Route::get('/addFriend/{id}','ProfileController@sendRequest');
+
+	Route::get('/requests','ProfileController@requests');
+
+	Route::get('/accept/{name}/{id}','ProfileController@accept');
+
+	Route::get('/requestRemove/{id}','ProfileController@requestRemove');
+
+	Route::get('/friends','ProfileController@friends');
+
+	Route::get('/unfriend/{id}', function($id){
+	    $loggedUser = Auth::user()->id;
+
+	    DB::table('friendships')
+	    ->where('requester', $loggedUser)
+	    ->where('user_requested', $id)
+	    ->delete();
+
+	    DB::table('friendships')
+	    ->where('user_requested', $loggedUser)
+	    ->where('requester', $id)
+	    ->delete();
+
+	    return back()->with('msg', 'You are now not friend with this person');
+        });
 });
 
 Route::get('/logout','Auth\LoginController@logout');
