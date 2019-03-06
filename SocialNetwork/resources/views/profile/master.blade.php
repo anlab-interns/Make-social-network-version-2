@@ -10,7 +10,13 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/profile.js') }}" defer></script>
+    <script>
+        window.Laravel = {!! json_encode([
+            'csrfToken' => csrf_token(),
+        ]) !!}
+        ;
+    </script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -22,6 +28,12 @@
 
 </head>
 <body>
+    <style>
+        #inboxSelect :hover {
+            cursor: pointer;
+        }
+    </style>
+
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
@@ -36,10 +48,8 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         @if(Auth::check())
-                            <li class="nav-item"><a class="nav-link" href="{{url('/profile')}}/{{ Auth::user()->slug}}" >Profile</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{url('/findFriends')}}">Find Friends</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{url('/requests')}}">My Requests ({{App\friendships::where('status',0)->where('user_requested',Auth::user()->id)->count()}})</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{url('friends')}}">Friends</a></li>
                         @endif
                     </ul>
 
@@ -56,15 +66,70 @@
                                 </li>
                             @endif
                         @else
-                            <li><a href="">
-                                <img src="{{url('../')}}/public/img/{{Auth::user()->pic}}" width="30" height="30">
-                            </a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{url('friends')}}"><i class="fas fa-2x fa-users"></i></a></li>
+
+                            <li class="nav-item"><a class="nav-link" href="{{url('messages')}}"><img src="{{url('../')}}/public/img/messenger.png" width="30" height="30"></a></li>
+
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    <i class='fas fa-2x fa-globe-asia'></i>
+                                    <?php
+                                        $notesCount=DB::table('notifcations')
+                                                    ->where('status',1)
+                                                    ->where('user_hero',Auth::user()->id)
+                                                    ->count();
+                                        if($notesCount>0)
+                                        {
+                                        ?>
+                                            <span class="badge badge-dark" style="background-color: red;border-radius: 7.25rem;position: relative;top: -20px;right: 10px;">
+                                                <?php
+                                                    echo $notesCount;
+                                                ?>
+                                            </span>
+                                        <?php
+                                        }
+                                    ?>
+                                    
+                                </a>
+
+                                <?php
+                                    $notes=DB::table('users')
+                                            ->rightJoin('notifcations','users.id','notifcations.user_logged')
+                                            ->where('user_hero',Auth::user()->id)
+                                            //->where('status',1)
+                                            ->orderBy('notifcations.created_at','desc')
+                                            ->get();
+                                ?>
+
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    @foreach($notes as $note)
+                                    @if($note->status==1)
+                                    <a class="dropdown-item" href="{{url('/notifications')}}/{{$note->id}}" style="background-color: #E4E9F2">
+                                        <b style="color: #3490dc">{{$note->name}}</b> {{$note->note}}
+                                    </a>
+                                    @else
+                                    <a class="dropdown-item" href="{{url('/notifications')}}/{{$note->id}}">
+                                        <b style="color: #3490dc">{{$note->name}}</b> {{$note->note}}
+                                    </a>
+                                    @endif
+                                    @endforeach
+                                </div>
+                            </li>
+
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                    <img src="{{url('../')}}/public/img/{{Auth::user()->pic}}" width="30" height="30"> <span class="caret"></span>
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+
+                                    <a class="dropdown-item" href="{{url('/profile')}}/{{ Auth::user()->slug}}" >
+                                        {{ __('Profile') }}
+                                    </a>
+
+                                    <a class="dropdown-item" href="{{ route('home') }}" >
+                                        {{ __('Home') }}
+                                    </a>
 
                                     <a class="dropdown-item" href="{{ url('editProfile') }}">
                                         {{ __('Edit profile') }}

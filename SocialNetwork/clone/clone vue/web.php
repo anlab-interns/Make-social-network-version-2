@@ -11,44 +11,23 @@
 |
 */
 
+//display posts
 Route::get('/', function () {
 	$posts=DB::table('posts')
         ->leftJoin('profiles','profiles.user_id','posts.user_id')
         ->leftJoin('users','users.id','posts.user_id')
-        ->orderBy('posts.created_at','desc')
+        ->orderBy('posts.created_at','desc')->take(2)
         ->get();
     return view('welcome',compact('posts'));
 });
 
-Route::get('newMessage','ProfileController@newMessage');
-
-Route::post('sendNewMessage','ProfileController@sendNewMessage');
-
-Route::post('/sendMessage','ProfileController@sendMessage');
-
-Route::get('/messages',function(){
-	return view('messages');
-});
-
-Route::get('/getMessages', function(){
-	$allUsers1=DB::table('users')
-			->Join('conversation','users.id','conversation.user_one')
-	        ->where('conversation.user_two',Auth::user()->id)
-	        ->get();
-	
-	$allUsers2=DB::table('users')
-			->Join('conversation','users.id','conversation.user_two')
-	        ->where('conversation.user_one',Auth::user()->id)
-	        ->get();
-
-	return array_merge($allUsers1->toArray(),$allUsers2->toArray());
-});
-
-Route::get('/getMessages/{id}', function($id){
-	$userMsg=DB::table('messages')
-	->join('users','users.id','messages.user_from')
-	->where('messages.conversation_id',$id)->get();
-	return $userMsg;
+Route::get('/posts', function () {
+	$posts_json=DB::table('posts')
+        ->leftJoin('profiles','profiles.user_id','posts.user_id')
+        ->leftJoin('users','users.id','posts.user_id')
+        ->orderBy('posts.created_at','desc')->take(2)
+        ->get();
+    return $posts_json;
 });
 
 Route::get('/test', function () {
@@ -105,16 +84,7 @@ Route::group(['middleware' => 'auth'], function(){
 	    return back()->with('msg', 'You are now not friend with this person');
         });
 
-	Route::post('/createPost','PostsController@createPost');
-
-	Route::get('/deletePost/{post_id}','PostsController@deletePost');
-
-	Route::get('/likePost/{post_id}','PostsController@likePost');
-
-	Route::get('/editPost/{post_id}','PostsController@editPost');
-
-	Route::post('/getPostEdited','PostsController@getPostEdited');
-
+	//Route::post('/createPost','PostsController@createPost');
 });
 
 //Route::get('posts','HomeController@index');

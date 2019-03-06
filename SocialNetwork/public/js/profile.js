@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -48960,82 +48960,6 @@ module.exports = function(module) {
 
 /***/ }),
 
-/***/ "./resources/js/app.js":
-/*!*****************************!*\
-  !*** ./resources/js/app.js ***!
-  \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
-
-window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
-
-Vue.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue").default);
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
-var app = new Vue({
-  el: '#app',
-  data: {
-    msg: 'update new post',
-    content: '',
-    posts: []
-  },
-  ready: function ready() {
-    this.created();
-  },
-  created: function created() {
-    var _this = this;
-
-    axios.get('http://localhost/www/framework/SocialNetwork/public/posts').then(function (response) {
-      console.log(response); //show if success
-
-      _this.posts = response.data; //we are putting data into our posts array
-    }).catch(function (error) {
-      console.log(error);
-    });
-  },
-  methods: {
-    addPost: function addPost() {
-      var _this2 = this;
-
-      //alert('test function');
-      axios.post('http://localhost/www/framework/SocialNetwork/public/addPost', {
-        content: this.content
-      }).then(function (response) {
-        _this2.content = "";
-        console.log('saved successfully'); //show if success
-
-        if (response.status === 200) {
-          app.posts = response.data;
-        }
-      }).catch(function (error) {
-        console.log(error);
-      });
-    }
-  }
-});
-
-/***/ }),
-
 /***/ "./resources/js/bootstrap.js":
 /*!***********************************!*\
   !*** ./resources/js/bootstrap.js ***!
@@ -49163,26 +49087,104 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/sass/app.scss":
+/***/ "./resources/js/profile.js":
 /*!*********************************!*\
-  !*** ./resources/sass/app.scss ***!
+  !*** ./resources/js/profile.js ***!
   \*********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-
-/***/ 0:
-/*!*************************************************************!*\
-  !*** multi ./resources/js/app.js ./resources/sass/app.scss ***!
-  \*************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\xampp\htdocs\www\framework\SocialNetwork\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\www\framework\SocialNetwork\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+
+window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+Vue.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue").default);
+var app = new Vue({
+  el: '#app',
+  data: {
+    msg: 'Click on user from left side',
+    content: '',
+    privsteMsgs: [],
+    singleMsgs: [],
+    msgFrom: '',
+    conID: '',
+    friend_id: '',
+    seen: false,
+    newMsgFrom: ''
+  },
+  ready: function ready() {
+    this.created();
+  },
+  created: function created() {
+    axios.get('http://localhost/www/framework/SocialNetwork/public/getMessages').then(function (response) {
+      console.log(response); //show if success
+
+      app.privsteMsgs = response.data;
+    }).catch(function (error) {
+      console.log(error);
+    });
+  },
+  methods: {
+    messages: function messages(id) {
+      axios.get('http://localhost/www/framework/SocialNetwork/public/getMessages/' + id).then(function (response) {
+        console.log(response); //show if success
+
+        app.singleMsgs = response.data;
+        app.conID = response.data[0].conversation_id;
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+    inputHandler: function inputHandler(e) {
+      if (e.keyCode === 13 && !e.shiftKey) {
+        e.preventDefault();
+        this.sendMsg();
+      }
+    },
+    sendMsg: function sendMsg() {
+      axios.post('http://localhost/www/framework/SocialNetwork/public/sendMessage', {
+        conID: this.conID,
+        msg: this.msgFrom
+      }).then(function (response) {
+        console.log(response.data); //show if success
+
+        if (response.status === 200) {
+          app.singleMsgs = response.data;
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+    friendID: function friendID(id) {
+      app.friend_id = id;
+    },
+    sendNewMsg: function sendNewMsg() {
+      axios.post('http://localhost/www/framework/SocialNetwork/public/sendNewMessage', {
+        friend_id: this.friend_id,
+        msg: this.newMsgFrom
+      }).then(function (response) {
+        console.log(response.data);
+
+        if (response.status === 200) {
+          window.location.replace('http://localhost/www/framework/SocialNetwork/public/messages');
+          app.msg = 'your message has been sent successfully';
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ 1:
+/*!***************************************!*\
+  !*** multi ./resources/js/profile.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\www\framework\SocialNetwork\resources\js\profile.js */"./resources/js/profile.js");
 
 
 /***/ })

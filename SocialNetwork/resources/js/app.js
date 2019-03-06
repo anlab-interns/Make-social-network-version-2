@@ -29,5 +29,44 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  */
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    data: {
+    	msg: 'update new post',
+    	content:'',
+    	posts: [],
+    },
+
+	ready: function(){
+	   this.created();
+	},
+
+    created() {
+    	axios.get('http://localhost/www/framework/SocialNetwork/public/posts')
+		.then(response => {
+			console.log(response); //show if success
+			this.posts=response.data; //we are putting data into our posts array
+		})
+		.catch(function (error) {
+			console.log(error);
+		});
+    },
+
+    methods: {
+    	addPost(){
+    		//alert('test function');
+    		axios.post('http://localhost/www/framework/SocialNetwork/public/addPost', {
+    			content: this.content
+    		})
+    		.then(response => {
+    			this.content="";
+    			console.log('saved successfully'); //show if success
+    			if(response.status===200){
+              		app.posts = response.data;
+				}
+    		})
+    		.catch(function (error) {
+    			console.log(error);
+    		});
+    	}
+    }
 });

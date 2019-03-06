@@ -48,7 +48,7 @@
                                         </a>
                                     </div>
                                     <div class="col-sm-12 col-md-6">    
-                                        <h4 style="color:#3490dc">{{$uList->name}}</h4>                                       
+                                        <h4><a href="{{url('/profile')}}/{{$uList->slug}}">{{$uList->name}}</a></h4>                        
                                         <h6 style="margin-bottom: 18px;color: gray"><i class='fas fa-globe-europe'></i> {{$uList->city}} - {{$uList->country}}</h6>
                                         <p>{{$uList->about}}</p>
                                     </div>

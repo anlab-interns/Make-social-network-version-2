@@ -74,7 +74,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Laravel Social Network
+                    Welcome to LaraBook
                 </div>
             </div>
         </div>

@@ -7,6 +7,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\profile;
+use App\post;
 
 class User extends Authenticatable
 {
@@ -32,8 +33,13 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-     public function profile()
+    public function profile()
     {
         return $this->hasOne('App\profile');
     }
+
+    public function post()
+    {
+        return $this->hasMany('App\post');
+    }    
 }
