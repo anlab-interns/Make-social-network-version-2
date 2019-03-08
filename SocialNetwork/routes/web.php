@@ -20,6 +20,8 @@ Route::get('/', function () {
     return view('welcome',compact('posts'));
 });
 
+Route::post('/search','PostsController@search');
+
 Route::get('newMessage','ProfileController@newMessage');
 
 Route::post('sendNewMessage','ProfileController@sendNewMessage');
@@ -114,6 +116,8 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/editPost/{post_id}','PostsController@editPost');
 
 	Route::post('/getPostEdited','PostsController@getPostEdited');
+
+	Route::post('/commentPost','PostsController@commentPost');
 
 });
 

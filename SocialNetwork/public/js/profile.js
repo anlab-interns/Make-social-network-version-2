@@ -49109,7 +49109,9 @@ var app = new Vue({
     conID: '',
     friend_id: '',
     seen: false,
-    newMsgFrom: ''
+    newMsgFrom: '',
+    qry: '',
+    results: []
   },
   ready: function ready() {
     this.created();
@@ -49170,6 +49172,16 @@ var app = new Vue({
         }
       }).catch(function (error) {
         console.log(error);
+      });
+    },
+    autoComplete: function autoComplete() {
+      //alert(this.qry);
+      this.results = [];
+      axios.post('http://localhost/www/framework/SocialNetwork/public/search', {
+        qry: this.qry
+      }).then(function (response) {
+        console.log(response.data);
+        app.results = response.data;
       });
     }
   }

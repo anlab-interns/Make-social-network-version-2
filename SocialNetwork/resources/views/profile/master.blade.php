@@ -11,6 +11,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/profile.js') }}" defer></script>
+   
     <script>
         window.Laravel = {!! json_encode([
             'csrfToken' => csrf_token(),
@@ -49,9 +50,23 @@
                     <ul class="navbar-nav mr-auto">
                         @if(Auth::check())
                             <li class="nav-item"><a class="nav-link" href="{{url('/findFriends')}}">Find Friends</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{url('/requests')}}">My Requests ({{App\friendships::where('status',0)->where('user_requested',Auth::user()->id)->count()}})</a></li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{url('/requests')}}">
+                                    My Requests 
+                                    <b style="color: red">({{App\friendships::where('status',0)->where('user_requested',Auth::user()->id)->count()}})</b>
+                                </a>
+                            </li>
                         @endif
                     </ul>
+
+                    <nav class="navbar navbar-expand-sm navbar-dark" style="padding-left: 0">
+                        <input class="form-control mr-sm-4" type="text" placeholder="Who are you looking for?" style="width: 350px" v-model="qry" v-on:Keyup="autoComplete">
+                        <div class="card-footer border" v-if="results.length" style="position: absolute;top: 45px;width: 90%;z-index: 10;background-color: #fff">
+                            <p v-for="result in results" class="border-bottom">
+                                <a :href="'{{url('profile')}}/' +  result.slug" style="text-decoration: none;font-weight: bold">@{{result.name}}</a>
+                            </p>
+                        </div>
+                    </nav>
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -68,7 +83,7 @@
                         @else
                             <li class="nav-item"><a class="nav-link" href="{{url('friends')}}"><i class="fas fa-2x fa-users"></i></a></li>
 
-                            <li class="nav-item"><a class="nav-link" href="{{url('messages')}}"><img src="{{url('../')}}/public/img/messenger.png" width="30" height="30"></a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{url('messages')}}"><i class="fab fa-2x fa-facebook-messenger"></i></a></li>
 
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

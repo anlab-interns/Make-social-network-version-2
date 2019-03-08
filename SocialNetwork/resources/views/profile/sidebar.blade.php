@@ -21,7 +21,7 @@
 
             <div class="row border-bottom" style="padding:10px">
                 <div class="col-md-4">
-                    <img src="{{url('../')}}/public/img/messenger.png" width="30" height="30">
+                    <i class="fab fa-2x fa-facebook-messenger"></i>
                 </div>
                 <div class="col-md-8">
                     <a href="{{url('/messages')}}" style="color: gray">Messenger</a>

@@ -26,7 +26,7 @@ class ProfileController extends Controller
     	$file = $request->file('pic');
     	$filename = $file->getClientOriginalName();
 
-    	$path='public/img';
+    	$path='img';
 
     	$file->move($path,$filename);
     	$user_id=Auth::user()->id;

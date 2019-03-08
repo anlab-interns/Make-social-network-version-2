@@ -39,7 +39,7 @@
                                     </a>
                                 </div>
                                 <div class="col-sm-12 col-md-6">    
-                                    <h4><a href="">{{$uList->name}}</a></h4>   
+                                    <h4><a href="{{url('/profile')}}/{{$uList->slug}}">{{$uList->name}}</a></h4>   
                                     <br>                                    
                                     <h6 style="color:#6c757d"><b>Gender: </b>{{$uList->gender}}</h6>
                                     <h6 style="color:#6c757d"><b>Email: </b>{{$uList->email}}</h6>

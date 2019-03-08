@@ -10,15 +10,25 @@ use App\notifcations;
 use App\User;
 use App\post;
 use App\like;
+use App\comment;
 
 class PostsController extends Controller
 {
     public function createPost(Request $request)
     {
-    	$uid=Auth::user()->id;
-    	$post = new Post();
+        $uid=Auth::user()->id;
+        $post = new Post();
+        $file = $request->file('photo');
+        if($file!="")
+        {
+            $filename = $file->getClientOriginalName();
+            $path='upload';
+            $file->move($path,$filename);
+            $post->photo = $filename;
+        }
     	$post->user_id=$uid;
     	$post->content=$request['stt'];
+        
     	$post->status='1';
     	$post->save();
     	return redirect()->route('home');
@@ -78,4 +88,30 @@ class PostsController extends Controller
         echo $newContent;
         return redirect()->route('home');
     }  
+
+    public function commentPost(Request $request)
+    {
+        $uid=Auth::user()->id;
+        $comment=$request['reply'];
+        $pid=$request['postid'];
+        DB::table('comments')->insert([
+            'user_id' => $uid,
+            'post_id' => $pid,
+            'comment' => $comment
+        ]);
+        return redirect()->route('home');
+    }
+
+    public function search(Request $request)
+    {
+        $qry= $request->qry;
+        if($qry!="")
+        {
+            $users=DB::table('users')
+                ->where('name','like','%'.$qry.'%')
+                ->get();
+
+            return $users;  
+        }
+    }
 }

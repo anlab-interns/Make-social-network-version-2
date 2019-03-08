@@ -15,7 +15,9 @@ const app = new Vue({
         conID:'',
         friend_id: '',
         seen: false,
-        newMsgFrom: ''
+        newMsgFrom: '',
+        qry:'',
+        results: []
     },
 
 	ready: function(){
@@ -84,10 +86,22 @@ const app = new Vue({
                     window.location.replace('http://localhost/www/framework/SocialNetwork/public/messages');
                     app.msg = 'your message has been sent successfully';
                 }
-                })
-                .catch(function (error) {
+            })
+            .catch(function (error) {
                     console.log(error); 
-                });
-           }
+            });
+        },
+
+        autoComplete(){
+            //alert(this.qry);
+            this.results=[];
+            axios.post('http://localhost/www/framework/SocialNetwork/public/search', {
+                qry: this.qry
+            })
+            .then(function (response) {
+                console.log(response.data); 
+                app.results=response.data;
+            });
+        }
     }
 });
