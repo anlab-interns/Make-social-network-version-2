@@ -1,6 +1,6 @@
 <div class="col-md-3">
     <div class="card">
-        <div class="card-header" style="background-color: #e9ecef">Quick links</div>
+        <div class="card-header" style="background-color: #e9ecef"><b>Quick links</b></div>
         <div class="card-body" style="background-color: rgba(0,0,0,.03);">
             <div class="row border-bottom" style="padding: 0 10px 10px 10px">
                 <div class="col-md-4">

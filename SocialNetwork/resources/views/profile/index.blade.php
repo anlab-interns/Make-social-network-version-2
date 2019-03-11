@@ -32,7 +32,11 @@
                                     <p align="center">
                                         <a href="{{url('/editProfile')}}" class="btn btn-primary" role="button">Edit profile</a>
                                     </p>
-                                    @endif
+                                    @else
+                                    <p align="center">
+                                        <a href="{{url('/messages')}}" class="btn btn-success" role="button">Send message</a>
+                                    </p>
+                                    @endif   
                                 </div>
                             </div>
                         </div>

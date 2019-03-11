@@ -25,8 +25,7 @@
                         </div>
                     @endif
                     <div class="col-md-4">
-                        Welcome to your profile
-                        <img src="{{url('../')}}/public/img/{{Auth::user()->pic}}" width="100" height="100"></br>
+                        <img src="{{url('../')}}/public/img/{{Auth::user()->pic}}" width="100" height="100" class="img-thumbnail"></br>
                         <br>
                         <hr>
 

@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <ol class="breadcrumb">
-        <li><a href="{{url('/profile')}}/{{Auth::user()->slug}}">Profile</a></li>        
+        <li class="breadcrumb-item active">Dashboard</li>        
     </ol>
 
     <div class="row justify-content-center">
@@ -11,7 +11,7 @@
 
         <div class="col-md-6">
             <div class="card" style="margin-bottom: 10px">
-                <div class="card-header" style="background-color: #e9ecef">Create a post</div>
+                <div class="card-header" style="background-color: #e9ecef"><b>Create a post</b></div>
 
                 <div class="card-body" style="background-color: rgba(0,0,0,.03);">
                     <div class="row">
@@ -155,7 +155,7 @@
                                                         <a href="{{url('/profile')}}/{{$getCmt->slug}}" style="font-weight: bold;text-decoration: none">{{$getCmt->name}}</a>
                                                     </div>
                                                     <div class="col-md-8" style="padding-left:7px">
-                                                        {{$getCmt->comment}}
+                                                        <p style="margin-bottom: 0;text-align: justify;">{{$getCmt->comment}}</p>
                                                     </div>    
                                                 </div>
                                                 @endforeach     
@@ -191,7 +191,34 @@
 
         <div class="col-md-3">
             <div class="card">
-                <div class="card-header" style="background-color: #e9ecef">Adv.</div>
+                <div class="card-header" style="background-color: #e9ecef"><b>Friends</b></div>
+                <div class="card-body" style="background-color: rgba(0,0,0,.03); padding-top: 0">
+                    @if(Auth::check())
+                        @foreach(App\user::with('friends')->get() as $user)
+                            @if($user->isOnline())
+                                @if($user->id != Auth::user()->id)
+                                    <div class="row border-bottom" style="padding: 10px 10px 10px 10px">
+                                        <div class="col-md-2">
+                                            <i class="fa fa-circle" style="color: #52ad52"></i>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <a href="{{url('/profile')}}/{{$user->slug}}" style="color:gray; text-decoration: none;">{{$user->name}}</a>
+                                        </div>
+                                    </div>
+                                @endif
+                            @else
+                                <div class="row border-bottom" style="padding: 10px 10px 10px 10px">
+                                    <div class="col-md-2">
+                                        <i class="fa fa-circle" style="color: #ccc"></i>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <a href="{{url('/profile')}}/{{$user->slug}}" style="color: gray; text-decoration: none">{{$user->name}}</a>
+                                    </div>
+                                </div>
+                            @endif
+                        @endforeach
+                    @endif
+                </div>
             </div>
         </div>
     </div>

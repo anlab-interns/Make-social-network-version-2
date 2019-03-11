@@ -8,6 +8,9 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\profile;
 use App\post;
+use Auth;
+use DB;
+use Cache;
 
 class User extends Authenticatable
 {
@@ -42,4 +45,14 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\post');
     }    
+
+    public function isOnline()
+    {
+        return Cache::has('active-user' . $this->id);
+    }
+
+    public function friends()
+    {
+        return $this->belongsTo('App\friendships','id','requester');
+    }
 }
